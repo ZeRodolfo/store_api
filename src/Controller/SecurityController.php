@@ -4,13 +4,13 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations as FOSRest;
 use FOS\OAuthServerBundle\Model\ClientManagerInterface;
 
 
-class SecurityController extends FOSRestController {
+class SecurityController extends AbstractFOSRestController {
 
   private $clientManager;
 
