@@ -7,20 +7,20 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
+use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Entity\Brand;
 use App\Repository\BrandRepository;
-use App\Repository\DefaultRepository;
 
 /**
  * Brand controller
  * @Route("/api/", name="api_")
  * @IsGranted("ROLE_ADMIN")
  */
-class BrandController extends DefaultController {
+class BrandController extends FOSRestController {
   /** 
    * Lists all Brands
    * @Rest\Get("brands")
