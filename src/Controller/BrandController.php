@@ -14,6 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Entity\Brand;
 use App\Repository\BrandRepository;
+use App\Lib\Paginator;
 
 /**
  * Brand controller
@@ -33,7 +34,10 @@ class BrandController extends FOSRestController {
     $repository = new BrandRepository($registry);
     $brands = $repository->findAll('json');
 
-    return new JsonResponse($brands);
+    $paginator = new Paginator($brands, 5);
+    $pagination = $paginator->setCurrentPage(1)->paginate();
+
+    return new JsonResponse($pagination);
   }
 
   /** 
