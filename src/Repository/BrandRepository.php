@@ -6,9 +6,10 @@ use App\Entity\Brand;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-class BrandRepository extends ServiceEntityRepository {
+class BrandRepository extends DefaultRepository {
   protected $registry;
   protected $data = [];
+  protected $errors;
 
   public function __construct(RegistryInterface $registry) {
     parent::__construct($registry, Brand::class);
@@ -16,42 +17,44 @@ class BrandRepository extends ServiceEntityRepository {
     $this->registry = $registry;
   }
 
-  public function findAll($format = null) {
-    $this->data = parent::findAll();
-
-    return $this->format($format);
-  }
-
-  public function find($id, $lockMode = NULL, $lockVersion = NULL, $format = NULL) {
-    $this->data = parent::find($id, $lockMode, $lockVersion);
-
-    return $this->format($format);
-  }
-
   public function save(Brand $brand) {
+    $this->clear();
+
     $em = $this->registry->getManager();
+
     try {
       $em->persist($brand);
     } catch (Exception $ex) {
+      $this->errors = $ex->getMessage();
+
       return false;
     } finally {
       $em->flush();
     }
 
     $this->data = $brand;
-    
+
     return true;
   }
 
-  private function format($format = null) {
-    switch ($format) {
-      case 'json':
-        return $this->toJSON();
-      case null:
-        return $this;
-      default:
-        return $this->data;
+  public function delete(Brand $brand) {
+    $this->clear();
+
+    $em = $this->registry->getManager();
+
+    try {
+      $em->remove($brand);
+    } catch (Exception $ex) {
+      $this->errors = $ex->getMessage();
+
+      return false;
+    } finally {
+      $em->flush();
     }
+
+    $this->data = [];
+
+    return true;
   }
 
   public function toJSON() {
@@ -59,6 +62,7 @@ class BrandRepository extends ServiceEntityRepository {
       return $this->data->toJSON();
     } else {
       $collections = [];
+
       foreach ($this->data as $data) {
         $collections[] = $data->toJSON();
       }

@@ -1,0 +1,7 @@
+brand:
+  name:
+    not_blank: "Nome: Campo não pode ser vazio."
+  description:
+    not_blank: "Descrição: Campo não pode ser vazio."
+  active:
+    not_blank: "Ativo: Campo não pode ser vazio."

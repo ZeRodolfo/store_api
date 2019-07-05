@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 use \DateTime;
 
@@ -21,13 +20,11 @@ class Brand {
 
   /**
    * @ORM\Column(type="string", length=200)
-   * @Assert\NotBlank()
    */
   private $name;
 
   /**
    * @ORM\Column(type="text")
-   * @Assert\NotBlank()
    */
   private $description;
 
@@ -161,11 +158,19 @@ class Brand {
   }
 
   public function __construct($data) {
-    $this->name = $data->name;
-    $this->description = $data->description;
+    $this->name = isset($data->name) ? $data->name : "";
+    $this->description = isset($data->description) ? $data->description : "";
     $this->active = isset($data->active) ? $data->active : true;
     $this->createdAt = isset($data->createdAt) ? $data->createdAt : new DateTime('now');
     $this->updatedAt = isset($data->updatedAt) ? $data->updatedAt : new DateTime('now');
+  }
+
+  public function load($data) {
+    $this->name = isset($data->name) ? $data->name : $this->name;
+    $this->description = isset($data->description) ? $data->description : $this->description;
+    $this->active = isset($data->active) ? $data->active : $this->active;
+    $this->createdAt = isset($data->createdAt) ? $data->createdAt : $this->createdAt;
+    $this->updatedAt = isset($data->updatedAt) ? $data->updatedAt : $this->updatedAt;
   }
 
   public function toJSON() {

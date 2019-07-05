@@ -5,21 +5,22 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Entity\Brand;
 use App\Repository\BrandRepository;
+use App\Repository\DefaultRepository;
 
 /**
  * Brand controller
  * @Route("/api/", name="api_")
  * @IsGranted("ROLE_ADMIN")
  */
-class BrandController extends FOSRestController {
+class BrandController extends DefaultController {
   /** 
    * Lists all Brands
    * @Rest\Get("brands")
@@ -52,7 +53,7 @@ class BrandController extends FOSRestController {
    * 
    * @return JsonResponse
    */
-  public function createAction(Request $request): JsonResponse
+  public function createAction(ValidatorInterface $validator, Request $request): JsonResponse
   {
     $data = json_decode($request->getContent());
     $user = $this->getUser();
@@ -61,8 +62,22 @@ class BrandController extends FOSRestController {
     $brand->setUserCreated($user);
     $brand->setUserUpdated($user);
 
+    $errors = $validator->validate($brand);
+
+    if (count($errors) > 0) {
+      $dataErrors = [];
+      foreach($errors as $error){
+        // Do stuff with:
+        //   $error->getPropertyPath() : the field that caused the error
+        //   $error->getMessage() : the error message
+        $dataErrors[$error->getPropertyPath()] = $error->getMessage();
+      }
+
+      return new JsonResponse($dataErrors);
+    }
+
     $registry = $this->getDoctrine();
-    $repository = new BrandRepository($registry);
+    $repository = new BrandRepository($registry, Brand::class);
           
     $status = $repository->save($brand);
     $json = $repository->toJSON();
@@ -81,17 +96,36 @@ class BrandController extends FOSRestController {
    * 
    * @return JsonResponse
    */
-  public function updateAction(Brand $brand, Request $request) {
-    $data = json_decode($request->getContent(), true);
-    
-    
-    $em = $this->getDoctrine()->getManager();
-    $em->persist($brand);
-    $em->flush();
+  public function updateAction(Brand $brand, ValidatorInterface $validator, Request $request) {
+    $data = json_decode($request->getContent());
+    $user = $this->getUser();
 
-    $response = new JsonResponse(['oi'], 200);
+    $brand->load($data);
+    $brand->setUserUpdated($user);
 
-    return $response;
+    $errors = $validator->validate($brand);
+
+    if (count($errors) > 0) {
+      $dataErrors = [];
+      foreach($errors as $error){
+        $dataErrors[$error->getPropertyPath()] = $error->getMessage();
+      }
+
+      return new JsonResponse($dataErrors);
+    }
+
+    $registry = $this->getDoctrine();
+    $repository = new BrandRepository($registry, Brand::class);
+          
+    $status = $repository->save($brand);
+    $json = $repository->toJSON();
+
+    $dataResponse = [
+      'status' => $status,
+      'entity' => $json
+    ];
+
+    return new JsonResponse($dataResponse);
   }
 
   /** 
@@ -102,27 +136,19 @@ class BrandController extends FOSRestController {
    */
   public function deleteAction(Request $request, Brand $brand): JsonResponse 
   {
-    $dataResponse = [
-      'status' => true,
-      'mensage' => "Marca excluída com sucesso."
-    ];
+    $registry = $this->getDoctrine();
+    $repository = new BrandRepository($registry);
+    $status = $repository->delete($brand);
 
-    if ($brand === null) {
+    if ($status) {
       $dataResponse = [
-        'status' => false,
-        'mensage' => "Não foi possível excluir, pois esta Marca já não se encontra mais no sistema."
+        'status' => true,
+        'mensage' => "Marca excluída com sucesso."
       ];
-    }
-    
-    $em = $this->getDoctrine()->getManager();
-
-    try {
-      $em->remove($brand);
-      $em->flush();
-    } catch (Exception $ex) {
+    } else {
       $dataResponse = [
         'status' => false,
-        'mensage' => $ex->getMessage()
+        'mensage' => "Não foi possível excluir esta Marca. " . $repository->getErrors()
       ];
     }
 

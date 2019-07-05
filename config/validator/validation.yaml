@@ -1,0 +1,6 @@
+App\Entity\Brand:
+  properties:
+    name:
+      - NotBlank: { message: "brand.name.not_blank" }
+    description:
+      - NotBlank: { message: "brand.description.not_blank" }
