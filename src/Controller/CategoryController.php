@@ -49,4 +49,53 @@ class CategoryController extends FOSRestController {
   {
     return new JsonResponse($category->toJSON());
   }
+
+  /** 
+   * Create Category
+   * @Rest\Post("category")
+   * 
+   * @return JsonResponse
+   */
+  public function createAction(ValidatorInterface $validator, Request $request): JsonResponse
+  {
+    $data = json_decode($request->getContent());
+    $user = $this->getUser();
+
+    $registry = $this->getDoctrine();
+    $repository = new CategoryRepository($registry);
+
+    $parent = NULL;
+    if (isset($data->parent)) {
+      $parent = $repository->find($data->parent);
+    }
+
+    $category = new Category($data);
+    $category->setParent($parent);
+    $category->setUserCreated($user);
+    $category->setUserUpdated($user);
+
+    $errors = $validator->validate($category);
+
+    if (count($errors) > 0) {
+      $dataErrors = [];
+      foreach($errors as $error){
+        // Do stuff with:
+        //   $error->getPropertyPath() : the field that caused the error
+        //   $error->getMessage() : the error message
+        $dataErrors[$error->getPropertyPath()] = $error->getMessage();
+      }
+
+      return new JsonResponse($dataErrors);
+    }
+          
+    $status = $repository->save($category);
+    $json = $repository->toJSON();
+
+    $dataResponse = [
+      'status' => $status,
+      'entity' => $json
+    ];
+
+    return new JsonResponse($dataResponse);
+  }
 }

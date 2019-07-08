@@ -43,9 +43,9 @@ abstract class DefaultRepository extends ServiceEntityRepository {
       case 'json':
         return $this->toJSON();
       case null:
-        return $this;
-      default:
         return $this->data;
+      default:
+        return $this;
     }
   }
 }

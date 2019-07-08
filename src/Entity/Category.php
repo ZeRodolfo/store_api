@@ -6,6 +6,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use \DateTime;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="category")
@@ -72,10 +74,16 @@ class Category
      */
     private $products;
 
-    public function __construct()
+    public function __construct($data=[])
     {
         $this->children = new ArrayCollection();
         $this->products = new ArrayCollection();
+
+        $this->active = true;
+        $this->createdAt = new DateTime('now');
+        $this->updatedAt = new DateTime('now');
+        
+        $this->load($data);
     }
 
     public function getId(): ?int
@@ -237,21 +245,29 @@ class Category
         }
 
         return $this;
-		}
-		
-		public function toJSON() {
-			$parent = $this->parent !== NULL ? $this->parent->toJSON() : NULL;
+    }
 
-			return [
-				"id"    => $this->id,
-				"name"  => $this->name,
-				"description" => $this->description,
-				"active" => $this->active,
-				"parent" => $parent,
-				"userCreated" => $this->userCreated->toJSON(),
-				"userUpdated" => $this->userUpdated->toJSON(),
-				"createdAt"   => $this->createdAt->format('d-m-Y'),
-				"updatedAt"   => $this->updatedAt->format('d-m-Y')
-			];
-		}
+    public function load($data) {
+        $this->name = isset($data->name) ? $data->name : $this->name;
+        $this->description = isset($data->description) ? $data->description : $this->description;
+        $this->active = isset($data->active) ? $data->active : $this->active;
+        $this->createdAt = isset($data->createdAt) ? $data->createdAt : $this->createdAt;
+        $this->updatedAt = isset($data->updatedAt) ? $data->updatedAt : $this->updatedAt;
+    }
+		
+    public function toJSON() {
+        $parent = $this->parent !== NULL ? $this->parent->toJSON() : NULL;
+
+        return [
+            "id"    => $this->id,
+            "name"  => $this->name,
+            "description" => $this->description,
+            "active" => $this->active,
+            "parent" => $parent,
+            "userCreated" => $this->userCreated->toJSON(),
+            "userUpdated" => $this->userUpdated->toJSON(),
+            "createdAt"   => $this->createdAt->format('d-m-Y'),
+            "updatedAt"   => $this->updatedAt->format('d-m-Y')
+        ];
+    }
 }
