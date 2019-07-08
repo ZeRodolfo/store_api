@@ -29,10 +29,22 @@ class User extends BaseUser {
    */
   private $brandsUpdated;
 
+  /**
+   * @ORM\OneToMany(targetEntity="App\Entity\Category", mappedBy="userCreated")
+   */
+  private $categoriesCreated;
+
+  /**
+   * @ORM\OneToMany(targetEntity="App\Entity\Category", mappedBy="userUpdated")
+   */
+  private $categoriesUpdated;
+
   public function __construct() {
     parent::__construct();
     $this->brandsCreated = new ArrayCollection();
     $this->brandsUpdated = new ArrayCollection();
+    $this->categoriesCreated = new ArrayCollection();
+    $this->categoriesUpdated = new ArrayCollection();
   }
 
   public function getRoles(): array
@@ -111,5 +123,67 @@ class User extends BaseUser {
       "id"    => $this->id,
       "username"  => $this->username,
     ];
+  }
+
+  /**
+   * @return Collection|Category[]
+   */
+  public function getCategoriesCreated(): Collection
+  {
+      return $this->categoriesCreated;
+  }
+
+  public function addCategoriesCreated(Category $categoriesCreated): self
+  {
+      if (!$this->categoriesCreated->contains($categoriesCreated)) {
+          $this->categoriesCreated[] = $categoriesCreated;
+          $categoriesCreated->setUserCreated($this);
+      }
+
+      return $this;
+  }
+
+  public function removeCategoriesCreated(Category $categoriesCreated): self
+  {
+      if ($this->categoriesCreated->contains($categoriesCreated)) {
+          $this->categoriesCreated->removeElement($categoriesCreated);
+          // set the owning side to null (unless already changed)
+          if ($categoriesCreated->getUserCreated() === $this) {
+              $categoriesCreated->setUserCreated(null);
+          }
+      }
+
+      return $this;
+  }
+
+  /**
+   * @return Collection|Category[]
+   */
+  public function getCategoriesUpdated(): Collection
+  {
+      return $this->categoriesUpdated;
+  }
+
+  public function addCategoriesUpdated(Category $categoriesUpdated): self
+  {
+      if (!$this->categoriesUpdated->contains($categoriesUpdated)) {
+          $this->categoriesUpdated[] = $categoriesUpdated;
+          $categoriesUpdated->setUserUpdated($this);
+      }
+
+      return $this;
+  }
+
+  public function removeCategoriesUpdated(Category $categoriesUpdated): self
+  {
+      if ($this->categoriesUpdated->contains($categoriesUpdated)) {
+          $this->categoriesUpdated->removeElement($categoriesUpdated);
+          // set the owning side to null (unless already changed)
+          if ($categoriesUpdated->getUserUpdated() === $this) {
+              $categoriesUpdated->setUserUpdated(null);
+          }
+      }
+
+      return $this;
   }
 }

@@ -157,7 +157,7 @@ class Brand {
       return $this;
   }
 
-  public function __construct($data) {
+  public function __construct($data=[]) {
     $this->name = isset($data->name) ? $data->name : "";
     $this->description = isset($data->description) ? $data->description : "";
     $this->active = isset($data->active) ? $data->active : true;
