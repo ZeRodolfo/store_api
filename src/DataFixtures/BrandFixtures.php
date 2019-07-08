@@ -4,21 +4,13 @@ namespace App\DataFixtures;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
-
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use App\Entity\Brand;
-use App\Entity\User;
+use App\DataFixtures\UserFixtures;
 
-class BrandFixtures extends Fixture
+class BrandFixtures extends Fixture implements DependentFixtureInterface
 {
-  private $encoder;
-
-  public function __construct(UserPasswordEncoderInterface $encoder)
-  {
-    $this->encoder = $encoder;
-  }
-
 	public function load(ObjectManager $manager)
 	{
     $brands = [
@@ -34,24 +26,14 @@ class BrandFixtures extends Fixture
       'Apple' => 'Apple Inc. é uma empresa multinacional norte-americana que tem o objetivo de projetar e comercializar produtos eletrônicos de consumo, software de computador e computadores pessoais.'
     ];
 
-    $user = new User();
-    $user->setUsername('admin');
-    $user->setEmail('jrodolfo@example.com');
-    $password = $this->encoder->encodePassword($user, '123mudar');
-    $user->setPassword($password);
-    $user->setEnabled(true);
-    $user->setRoles(['ROLE_ADMIN']);
-
-    $manager->persist($user);
-
     // create 10 brands! Bam!
     foreach($brands as $name => $description) {
       $brand = new Brand();
       $brand->setName($name);
       $brand->setDescription($description);
       $brand->setActive(true);
-      $brand->setUserCreated($user);
-      $brand->setUserUpdated($user);
+      $brand->setUserCreated($this->getReference(UserFixtures::ADMIN_USER_REFERENCE));
+      $brand->setUserUpdated($this->getReference(UserFixtures::ADMIN_USER_REFERENCE));
       $brand->setCreatedAt(new \DateTime('now'));
       $brand->setUpdatedAt(new \DateTime('now'));
 
@@ -59,5 +41,11 @@ class BrandFixtures extends Fixture
     }
 
 		$manager->flush();
-	}
+  }
+  
+  public function getDependencies() {
+    return array(
+      UserFixtures::class,
+    );
+  }
 }

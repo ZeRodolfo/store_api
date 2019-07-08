@@ -6,6 +6,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use App\Entity\Category;
+use App\DataFixtures\UserFixtures;
 
 use \DateTime;
 
