@@ -236,5 +236,21 @@ class Category
         }
 
         return $this;
-    }
+		}
+		
+		public function toJSON() {
+			$parent = $this->parent !== NULL ? $this->parent->toJSON() : NULL;
+
+			return [
+				"id"    => $this->id,
+				"name"  => $this->name,
+				"description" => $this->description,
+				"active" => $this->active,
+				"parent" => $parent,
+				"userCreated" => $this->userCreated->toJSON(),
+				"userUpdated" => $this->userUpdated->toJSON(),
+				"createdAt"   => $this->createdAt->format('d-m-Y'),
+				"updatedAt"   => $this->updatedAt->format('d-m-Y')
+			];
+		}
 }

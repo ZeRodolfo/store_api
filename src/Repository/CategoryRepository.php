@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Category;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -12,11 +12,13 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method Category[]    findAll()
  * @method Category[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CategoryRepository extends ServiceEntityRepository
+class CategoryRepository extends DefaultRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, Category::class);
+				parent::__construct($registry, Category::class);
+				
+    		$this->registry = $registry;
     }
 
     // /**
@@ -46,5 +48,19 @@ class CategoryRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
-    */
+		*/
+		
+		public function toJSON() {
+			if ($this->data instanceof Category) {
+				return $this->data->toJSON();
+			} else {
+				$collections = [];
+	
+				foreach ($this->data as $data) {
+					$collections[] = $data->toJSON();
+				}
+	
+				return $collections;
+			}
+		}
 }
