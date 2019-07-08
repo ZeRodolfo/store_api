@@ -17,6 +17,7 @@ use App\Repository\CategoryRepository;
 use App\Lib\Paginator;
 
 /** 
+ * Category controller
  * @Route("/api/", name="api_")
  */
 class CategoryController extends FOSRestController {
@@ -36,5 +37,16 @@ class CategoryController extends FOSRestController {
     $pagination = $paginator->setCurrentPage(1)->paginate();
 
     return new JsonResponse($pagination);
+  }
+
+  /** 
+   * Show Category
+   * @Rest\Get("categories/{id}")
+   * 
+   * @return JsonResponse
+   */
+  public function showAction(Category $category): JsonResponse
+  {
+    return new JsonResponse($category->toJSON());
   }
 }

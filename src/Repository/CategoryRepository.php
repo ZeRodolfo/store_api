@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
-use App\Entity\Category;
-
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+
+use App\Entity\Category;
 
 /**
  * @method Category|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,6 +15,10 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class CategoryRepository extends DefaultRepository
 {
+		protected $registry;
+		protected $data = [];
+		protected $errors;
+
     public function __construct(RegistryInterface $registry)
     {
 				parent::__construct($registry, Category::class);
@@ -49,6 +54,46 @@ class CategoryRepository extends DefaultRepository
         ;
     }
 		*/
+
+		public function save(Category $category) {
+			$this->clear();
+	
+			$em = $this->registry->getManager();
+	
+			try {
+				$em->persist($category);
+			} catch (Exception $ex) {
+				$this->errors = $ex->getMessage();
+	
+				return false;
+			} finally {
+				$em->flush();
+			}
+	
+			$this->data = $category;
+	
+			return true;
+		}
+	
+		public function delete(Category $category) {
+			$this->clear();
+	
+			$em = $this->registry->getManager();
+	
+			try {
+				$em->remove($category);
+			} catch (Exception $ex) {
+				$this->errors = $ex->getMessage();
+	
+				return false;
+			} finally {
+				$em->flush();
+			}
+	
+			$this->data = [];
+	
+			return true;
+		}
 		
 		public function toJSON() {
 			if ($this->data instanceof Category) {
