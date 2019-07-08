@@ -82,7 +82,7 @@ class Category
         $this->active = true;
         $this->createdAt = new DateTime('now');
         $this->updatedAt = new DateTime('now');
-        
+
         $this->load($data);
     }
 

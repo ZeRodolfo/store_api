@@ -79,9 +79,49 @@ class CategoryController extends FOSRestController {
     if (count($errors) > 0) {
       $dataErrors = [];
       foreach($errors as $error){
-        // Do stuff with:
-        //   $error->getPropertyPath() : the field that caused the error
-        //   $error->getMessage() : the error message
+        $dataErrors[$error->getPropertyPath()] = $error->getMessage();
+      }
+
+      return new JsonResponse($dataErrors);
+    }
+          
+    $status = $repository->save($category);
+    $json = $repository->toJSON();
+
+    $dataResponse = [
+      'status' => $status,
+      'entity' => $json
+    ];
+
+    return new JsonResponse($dataResponse);
+  }
+
+  /** 
+   * Update Category
+   * @Rest\Put("categories/{id}")
+   * 
+   * @return JsonResponse
+   */
+  public function updateAction(Category $category, ValidatorInterface $validator, Request $request) {
+    $data = json_decode($request->getContent());
+    $user = $this->getUser();
+
+    $registry = $this->getDoctrine();
+    $repository = new CategoryRepository($registry);
+
+    $category->load($data);
+    $category->setUserUpdated($user);
+
+    if (isset($data->parent)) {
+      $parent = $repository->find($data->parent);
+      $category->setParent($parent);
+    }
+
+    $errors = $validator->validate($category);
+
+    if (count($errors) > 0) {
+      $dataErrors = [];
+      foreach($errors as $error){
         $dataErrors[$error->getPropertyPath()] = $error->getMessage();
       }
 
