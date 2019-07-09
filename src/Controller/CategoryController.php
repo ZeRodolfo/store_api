@@ -53,6 +53,7 @@ class CategoryController extends FOSRestController {
   /** 
    * Create Category
    * @Rest\Post("category")
+   * @IsGranted("ROLE_ADMIN")
    * 
    * @return JsonResponse
    */
@@ -99,6 +100,7 @@ class CategoryController extends FOSRestController {
   /** 
    * Update Category
    * @Rest\Put("categories/{id}")
+   * @IsGranted("ROLE_ADMIN")
    * 
    * @return JsonResponse
    */
@@ -135,6 +137,34 @@ class CategoryController extends FOSRestController {
       'status' => $status,
       'entity' => $json
     ];
+
+    return new JsonResponse($dataResponse);
+  }
+
+  /** 
+   * Delete Category
+   * @Rest\Delete("categories/{id}")
+   * @IsGranted("ROLE_ADMIN")
+   * 
+   * @return JsonResponse
+   */
+  public function deleteAction(Category $category, Request $request): JsonResponse 
+  {
+    $registry = $this->getDoctrine();
+    $repository = new CategoryRepository($registry);
+    $status = $repository->delete($category);
+
+    if ($status) {
+      $dataResponse = [
+        'status' => true,
+        'mensage' => "Categoria excluída com sucesso."
+      ];
+    } else {
+      $dataResponse = [
+        'status' => false,
+        'mensage' => "Não foi possível excluir esta Categoria. " . $repository->getErrors()
+      ];
+    }
 
     return new JsonResponse($dataResponse);
   }
