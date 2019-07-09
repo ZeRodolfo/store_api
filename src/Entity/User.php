@@ -39,12 +39,24 @@ class User extends BaseUser {
    */
   private $categoriesUpdated;
 
+  /**
+   * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="userCreated")
+   */
+  private $productsCreated;
+
+  /**
+   * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="userUpdated")
+   */
+  private $productsUpdated;
+
   public function __construct() {
     parent::__construct();
     $this->brandsCreated = new ArrayCollection();
     $this->brandsUpdated = new ArrayCollection();
     $this->categoriesCreated = new ArrayCollection();
     $this->categoriesUpdated = new ArrayCollection();
+    $this->productsCreated = new ArrayCollection();
+    $this->productsUpdated = new ArrayCollection();
   }
 
   public function getRoles(): array
@@ -181,6 +193,68 @@ class User extends BaseUser {
           // set the owning side to null (unless already changed)
           if ($categoriesUpdated->getUserUpdated() === $this) {
               $categoriesUpdated->setUserUpdated(null);
+          }
+      }
+
+      return $this;
+  }
+
+  /**
+   * @return Collection|Product[]
+   */
+  public function getProductsCreated(): Collection
+  {
+      return $this->productsCreated;
+  }
+
+  public function addProductsCreated(Product $productsCreated): self
+  {
+      if (!$this->productsCreated->contains($productsCreated)) {
+          $this->productsCreated[] = $productsCreated;
+          $productsCreated->setUserCreated($this);
+      }
+
+      return $this;
+  }
+
+  public function removeProductsCreated(Product $productsCreated): self
+  {
+      if ($this->productsCreated->contains($productsCreated)) {
+          $this->productsCreated->removeElement($productsCreated);
+          // set the owning side to null (unless already changed)
+          if ($productsCreated->getUserCreated() === $this) {
+              $productsCreated->setUserCreated(null);
+          }
+      }
+
+      return $this;
+  }
+
+  /**
+   * @return Collection|Product[]
+   */
+  public function getProductsUpdated(): Collection
+  {
+      return $this->productsUpdated;
+  }
+
+  public function addProductsUpdated(Product $productsUpdated): self
+  {
+      if (!$this->productsUpdated->contains($productsUpdated)) {
+          $this->productsUpdated[] = $productsUpdated;
+          $productsUpdated->setUserUpdated($this);
+      }
+
+      return $this;
+  }
+
+  public function removeProductsUpdated(Product $productsUpdated): self
+  {
+      if ($this->productsUpdated->contains($productsUpdated)) {
+          $this->productsUpdated->removeElement($productsUpdated);
+          // set the owning side to null (unless already changed)
+          if ($productsUpdated->getUserUpdated() === $this) {
+              $productsUpdated->setUserUpdated(null);
           }
       }
 

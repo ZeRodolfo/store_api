@@ -12,6 +12,9 @@ use App\DataFixtures\UserFixtures;
 use \DateTime;
 
 class CategoryFixtures extends Fixture implements DependentFixtureInterface {
+
+  public const AGRICULTURA_REFERENCE = 'AGRICULTURA';
+
   public function load(ObjectManager $manager) {
 
     $categories = [
@@ -58,6 +61,14 @@ class CategoryFixtures extends Fixture implements DependentFixtureInterface {
         $category->setUpdatedAt(new DateTime('now'));
 
         $manager->persist($category);
+
+        switch (str_replace(' ', '_', strtoupper(trim($name)))) {
+          case self::AGRICULTURA_REFERENCE: 
+            $this->addReference(self::AGRICULTURA_REFERENCE, $category);
+            break;
+          default:
+            break;
+        }
       }
     }
 
