@@ -19,7 +19,7 @@ use App\Lib\Paginator;
 /**
  * Brand controller
  * @Route("/api/", name="api_")
- * @IsGranted("ROLE_ADMIN")
+ * 
  */
 class BrandController extends FOSRestController {
   /** 
@@ -42,7 +42,7 @@ class BrandController extends FOSRestController {
 
   /** 
    * Show Brand
-   * @Rest\Get("brand/{id}")
+   * @Rest\Get("brands/{id}")
    * 
    * @return JsonResponse
    */
@@ -54,6 +54,7 @@ class BrandController extends FOSRestController {
   /** 
    * Create Brand
    * @Rest\Post("brand")
+   * @IsGranted("ROLE_ADMIN")
    * 
    * @return JsonResponse
    */
@@ -81,7 +82,7 @@ class BrandController extends FOSRestController {
     }
 
     $registry = $this->getDoctrine();
-    $repository = new BrandRepository($registry, Brand::class);
+    $repository = new BrandRepository($registry);
           
     $status = $repository->save($brand);
     $json = $repository->toJSON();
@@ -96,7 +97,8 @@ class BrandController extends FOSRestController {
 
   /** 
    * Update Brand
-   * @Rest\Put("brand/{id}")
+   * @Rest\Put("brands/{id}")
+   * @IsGranted("ROLE_ADMIN")
    * 
    * @return JsonResponse
    */
@@ -119,7 +121,7 @@ class BrandController extends FOSRestController {
     }
 
     $registry = $this->getDoctrine();
-    $repository = new BrandRepository($registry, Brand::class);
+    $repository = new BrandRepository($registry);
           
     $status = $repository->save($brand);
     $json = $repository->toJSON();
@@ -134,11 +136,12 @@ class BrandController extends FOSRestController {
 
   /** 
    * Delete Brand
-   * @Rest\Delete("brand/{id}")
+   * @Rest\Delete("brands/{id}")
+   * @IsGranted("ROLE_ADMIN")
    * 
    * @return JsonResponse
    */
-  public function deleteAction(Request $request, Brand $brand): JsonResponse 
+  public function deleteAction(Brand $brand, Request $request): JsonResponse 
   {
     $registry = $this->getDoctrine();
     $repository = new BrandRepository($registry);
