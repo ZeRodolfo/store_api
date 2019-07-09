@@ -27,11 +27,11 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface {
       $product = new Product();
       $product->setName($products[$line]['name']);
       $product->setDescription($products[$line]['description']);
-      /*$product->setUserCreated($this->getReference(UserFixtures::ADMIN_USER_REFERENCE));
+      $product->setUserCreated($this->getReference(UserFixtures::ADMIN_USER_REFERENCE));
       $product->setUserUpdated($this->getReference(UserFixtures::ADMIN_USER_REFERENCE));
       $product->setCreatedAt(new DateTime('now'));
       $product->setUpdatedAt(new DateTime('now'));
-*/
+
       foreach ($products[$line]['categories'] as $categoryReference) {
         $product->addCategory($this->getReference($categoryReference));
       }

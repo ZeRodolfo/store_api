@@ -59,13 +59,13 @@ class Category
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="children")
-     * @ORM\JoinColumn(name="parent", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="children", cascade={"persist"})
+     * @ORM\JoinColumn(name="parent", referencedColumnName="id", onDelete="CASCADE")
      */
     private $parent;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Category", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="App\Entity\Category", mappedBy="parent", cascade={"remove"}, orphanRemoval=true)
      */
     private $children;
 

@@ -6,6 +6,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use \DateTime;
+
 /**
  * @ORM\Entity
  * @ORM\Table("product")
@@ -64,6 +66,10 @@ class Product
     public function __construct()
     {
         $this->categories = new ArrayCollection();
+
+        $this->active = true;
+        $this->createdAt = new DateTime('now');
+        $this->updatedAt = new DateTime('now');
     }
 
     public function getId(): ?int
