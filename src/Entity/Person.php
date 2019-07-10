@@ -22,7 +22,7 @@ class Person
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="enum_person")
      */
     private $type;
 
@@ -52,7 +52,7 @@ class Person
     private $birthdate;
 
     /**
-     * @ORM\Column(type="string", length=10, nullable=true)
+     * @ORM\Column(type="enum_gender", nullable=true)
      */
     private $gender;
 
