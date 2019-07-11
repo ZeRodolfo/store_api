@@ -1,0 +1,11 @@
+[
+	{
+		"supplierReference": "LEGAL_1",
+		"street": "Rua geremias",
+		"district": "Centro",
+		"number": "10",
+		"postalCode": "28000000",
+		"complement": "Perto da esquina do João",
+		"note": "Endereço primário"
+	}
+]

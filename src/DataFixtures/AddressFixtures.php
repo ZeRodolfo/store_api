@@ -6,11 +6,11 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-use App\Entity\Supplier;
+use App\Entity\Address;
 use App\DataFixtures\UserFixtures;
-use App\DataFixtures\PersonFixtures;
+use App\DataFixtures\SupplierFixtures;
 
-class SupplierFixtures extends Fixture implements DependentFixtureInterface
+class AddressFixtures extends Fixture implements DependentFixtureInterface
 {
   public const LEGAL_1_REFERENCE = 'LEGAL_1';
   public const LEGAL_2_REFERENCE = 'LEGAL_2';
@@ -26,30 +26,28 @@ class SupplierFixtures extends Fixture implements DependentFixtureInterface
 	{
     $user = $this->getReference(UserFixtures::ADMIN_USER_REFERENCE);
 
-    $json = file_get_contents($this->dataJsonDirectory . 'supplier.json');
+    $json = file_get_contents($this->dataJsonDirectory . 'address.json');
     $jsonData = json_decode($json);
 
     foreach ($jsonData as $data) {
-      $person = $data->personReference;
+      $supplier = $data->supplierReference;
 
-      $supplier = new Supplier($data);
-      $supplier->setUserCreated($user);
-      $supplier->setUserUpdated($user);
+      $address = new Address($data);
+      $address->setUserCreated($user);
+      $address->setUserUpdated($user);
 
-      switch ($person) {
+      switch ($supplier) {
         case self::LEGAL_1_REFERENCE: 
-          $supplier->setPerson($this->getReference(PersonFixtures::LEGAL_1_REFERENCE));
-          $this->setReference(self::LEGAL_1_REFERENCE, $supplier);
+          $address->setSupplier($this->getReference(SupplierFixtures::LEGAL_1_REFERENCE));
           break;
         case self::LEGAL_2_REFERENCE: 
-          $supplier->setPerson($this->getReference(PersonFixtures::LEGAL_2_REFERENCE));
-          $this->setReference(self::LEGAL_2_REFERENCE, $supplier);
+          $address->setSupplier($this->getReference(SupplierFixtures::LEGAL_2_REFERENCE));
           break;
         default:
           break;
       }
-      
-      $manager->persist($supplier);
+
+      $manager->persist($address);
     }
 
     $manager->flush();
@@ -58,7 +56,7 @@ class SupplierFixtures extends Fixture implements DependentFixtureInterface
   public function getDependencies() {
     return array(
       UserFixtures::class,
-      PersonFixtures::class
+      SupplierFixtures::class
     );
   }
 }

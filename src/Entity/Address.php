@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use \DateTime;
+
 /**
  * @ORM\Entity
  */
@@ -72,6 +74,25 @@ class Address
      * @ORM\ManyToOne(targetEntity="App\Entity\Supplier", inversedBy="address")
      */
     private $supplier;
+
+    public function __construct($data=[]) 
+    {
+        $this->createdAt = new DateTime('now');
+        $this->updatedAt = new DateTime('now');
+
+        $this->load($data);
+    }
+
+    public function load($data=[]) {
+        $this->street = isset($data->street) ? $data->street : $this->street;
+        $this->district = isset($data->district) ? $data->district : $this->district;
+        $this->number = isset($data->number) ? $data->number : $this->number;
+        $this->postalCode = isset($data->postalCode) ? $data->postalCode : $this->postalCode;
+        $this->complement = isset($data->complement) ? $data->complement : $this->complement;
+        $this->note = isset($data->note) ? $data->note : $this->note;
+        $this->createdAt = isset($data->createdAt) ? $data->createdAt : $this->createdAt;
+        $this->updatedAt = isset($data->updatedAt) ? $data->updatedAt : $this->updatedAt;
+    }
 
     public function getId(): ?int
     {
