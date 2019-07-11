@@ -92,6 +92,20 @@ class Supplier
         $this->updatedAt = isset($data->updatedAt) ? $data->updatedAt : $this->updatedAt;
     }
 
+    public function toJSON() {
+        return [
+            "email" => $this->email,
+            "contactName" => $this->contactName,
+            "active" => $this->active,
+            "sendEmailServiceOrder" => $this->sendEmailServiceOrder,
+            "userCreated" => $this->userCreated->toJSON(),
+            "userUpdated" => $this->userUpdated->toJSON(),
+            "createdAt" => $this->createdAt->format('Y-m-d'),
+            "updatedAt" => $this->updatedAt->format('Y-m-d'),
+            "person" => $this->person->toJSON()
+        ]
+    }
+
     public function getId(): ?int
     {
         return $this->id;
