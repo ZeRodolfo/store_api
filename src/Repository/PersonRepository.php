@@ -12,11 +12,17 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method Person[]    findAll()
  * @method Person[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class PersonRepository extends ServiceEntityRepository
+class PersonRepository extends DefaultRepository
 {
+    protected $registry;
+    protected $data = [];
+    protected $errors;
+
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Person::class);
+
+        $this->registry = $registry;
     }
 
     // /**
