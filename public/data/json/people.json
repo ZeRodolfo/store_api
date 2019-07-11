@@ -5,7 +5,8 @@
 		"cpf": "08578699068",
 		"email": "teste@teste.com",
 		"birthdate": "1994-04-06",
-		"gender": "male"
+		"gender": "male",
+		"reference": "PHYSICAL_1"
 	},
 	{
 		"name": "Ana Carolina",
@@ -13,7 +14,8 @@
 		"cpf": "94588696092",
 		"email": "teste1@teste.com",
 		"birthdate": "1992-01-04",
-		"gender": "female"
+		"gender": "female",
+		"reference": "PHYSICAL_2"
 	},
 	{
 		"name": "Beatriz",
@@ -21,20 +23,23 @@
 		"cpf": "72114159086",
 		"email": "teste2@teste.com",
 		"birthdate": "1987-08-20",
-		"gender": "female"
+		"gender": "female",
+		"reference": "PHYSICAL_3"
 	},
 	{
 		"name": "TSItech",
 		"type": "legal",
 		"company": "TSI Tech Soluções",
 		"cnpj": "31685783000118",
-		"email": "teste3@teste.com"
+		"email": "teste3@teste.com",
+		"reference": "LEGAL_1"
 	},
 	{
 		"name": "Telex",
 		"type": "legal",
 		"company": "Telex Soluções",
 		"cnpj": "65907652000150",
-		"email": "teste4@teste.com"
+		"email": "teste4@teste.com",
+		"reference": "LEGAL_2"
 	}
 ]

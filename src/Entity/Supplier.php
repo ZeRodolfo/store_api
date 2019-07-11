@@ -6,6 +6,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use \DateTime;
+
 /**
  * @ORM\Entity
  */
@@ -71,9 +73,23 @@ class Supplier
      */
     private $active;
 
-    public function __construct()
+    public function __construct($data=[])
     {
         $this->address = new ArrayCollection();
+
+        $this->active = true;
+        $this->createdAt = new DateTime('now');
+        $this->updatedAt = new DateTime('now');
+        $this->load($data);
+    }
+
+    public function load($data=[]) {
+        $this->email = isset($data->email) ? $data->email : $this->email;
+        $this->contactName = isset($data->contactName) ? $data->contactName : $this->contactName;
+        $this->active = isset($data->active) ? $data->active : $this->active;
+        $this->sendEmailServiceOrder = isset($data->sendEmailServiceOrder) ? $data->sendEmailServiceOrder : $this->sendEmailServiceOrder;
+        $this->createdAt = isset($data->createdAt) ? $data->createdAt : $this->createdAt;
+        $this->updatedAt = isset($data->updatedAt) ? $data->updatedAt : $this->updatedAt;
     }
 
     public function getId(): ?int

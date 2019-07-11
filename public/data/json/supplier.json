@@ -1,0 +1,16 @@
+[
+	{
+		"personReference": "LEGAL_1",
+		"email": "teste3@teste.com",
+		"contactName": "João Barcelos",
+		"sendEmailServiceOrder": true,
+		"active": false
+	},
+	{
+		"personReference": "LEGAL_2",
+		"email": "teste4@teste.com",
+		"contactName": "Aparecida Gomes",
+		"sendEmailServiceOrder": true,
+		"active": true
+	}
+]
