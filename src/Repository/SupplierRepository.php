@@ -12,11 +12,17 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method Supplier[]    findAll()
  * @method Supplier[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class SupplierRepository extends ServiceEntityRepository
+class SupplierRepository extends DefaultRepository
 {
+    protected $registry;
+    protected $data = [];
+    protected $errors;
+
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Supplier::class);
+
+        $this->registry = $registry;
     }
 
     // /**
