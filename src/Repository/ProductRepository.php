@@ -54,6 +54,26 @@ class ProductRepository extends DefaultRepository
     }
     */
 
+    public function save(Product $product) {
+        $this->clear();
+
+        $em = $this->registry->getManager();
+
+        try {
+            $em->persist($product);
+        } catch (Exception $ex) {
+            $this->errors = $ex->getMessage();
+
+            return false;
+        } finally {
+            $em->flush();
+        }
+
+        $this->data = $product;
+
+        return true;
+    }
+
     public function toJSON() {
         if ($this->data instanceof Product) {
             return $this->data->toJSON();
