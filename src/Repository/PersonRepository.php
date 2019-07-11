@@ -53,4 +53,18 @@ class PersonRepository extends DefaultRepository
         ;
     }
     */
+
+    public function toJSON() {
+        if ($this->data instanceof Person) {
+            return $this->data->toJSON();
+        } else {
+            $collections = [];
+
+            foreach ($this->data as $data) {
+                $collections[] = $data->toJSON();
+            }
+
+            return $collections;
+        }
+    }
 }
