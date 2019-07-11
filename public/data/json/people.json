@@ -1,0 +1,40 @@
+[
+	{
+		"name": "José Rodolfo",
+		"type": "physical",
+		"cpf": "08578699068",
+		"email": "teste@teste.com",
+		"birthdate": "1994-04-06",
+		"gender": "male"
+	},
+	{
+		"name": "Ana Carolina",
+		"type": "physical",
+		"cpf": "94588696092",
+		"email": "teste1@teste.com",
+		"birthdate": "1992-01-04",
+		"gender": "female"
+	},
+	{
+		"name": "Beatriz",
+		"type": "physical",
+		"cpf": "72114159086",
+		"email": "teste2@teste.com",
+		"birthdate": "1987-08-20",
+		"gender": "female"
+	},
+	{
+		"name": "TSItech",
+		"type": "legal",
+		"company": "TSI Tech Soluções",
+		"cnpj": "31685783000118",
+		"email": "teste3@teste.com"
+	},
+	{
+		"name": "Telex",
+		"type": "legal",
+		"company": "Telex Soluções",
+		"cnpj": "65907652000150",
+		"email": "teste4@teste.com"
+	}
+]

@@ -6,6 +6,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use \DateTime;
+
 /**
  * @ORM\Entity
  */
@@ -29,7 +31,7 @@ class Person
     private $type;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $company;
 
@@ -85,9 +87,52 @@ class Person
      */
     private $suppliers;
 
-    public function __construct()
+    public function __construct($data=[])
     {
         $this->suppliers = new ArrayCollection();
+
+        $this->createdAt = new DateTime('now');
+        $this->updatedAt = new DateTime('now');
+        $this->load($data);
+    }
+
+    public function load($data=[]) 
+    {
+        if (isset($data->birthdate)) {
+            if ($data->birthdate instanceof DateTime) {
+                $this->birthdate = $data->birthdate;
+            } else {
+                $this->birthdate = new DateTime($data->birthdate);
+            }
+        }
+
+        $this->name = isset($data->name) ? $data->name : $this->name;
+        $this->type = isset($data->type) ? $data->type : $this->type;
+        $this->company = isset($data->company) ? $data->company : $this->company;
+        $this->cpf = isset($data->cpf) ? $data->cpf : $this->cpf;
+        $this->cnpj = isset($data->cnpj) ? $data->cnpj : $this->cnpj;
+        $this->email = isset($data->email) ? $data->email : $this->email;
+        //$this->birthdate = isset($data->birthdate) ? $data->birthdate : $this->birthdate;
+        $this->gender = isset($data->gender) ? $data->gender : $this->gender;
+        $this->createdAt = isset($data->createdAt) ? $data->createdAt : $this->createdAt;
+        $this->updatedAt = isset($data->updatedAt) ? $data->updatedAt : $this->updatedAt;
+    }
+
+    public function toJSON() {
+        return [
+            "name" => $this->name,
+            "type" => $this->type,
+            "company" => $this->company,
+            "cpf" => $this->cpf,
+            "cnpj" => $this->cnpj,
+            "email" => $this->email,
+            "birthdate" => $this->birthdate,
+            "gender" => $this->gender,
+            "userCreated" => $this->userCreated->toJSON(),
+            "userUpdated" => $this->userUpdated->toJSON(),
+            "createdAt"   => $this->createdAt->format('d-m-Y'),
+            "updatedAt"   => $this->updatedAt->format('d-m-Y')
+        ];
     }
 
     public function getId(): ?int
