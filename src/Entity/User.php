@@ -40,6 +40,7 @@ class User extends BaseUser {
   private $categoriesUpdated;
 
   /**
+
    * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="userCreated")
    */
   private $productsCreated;
@@ -49,6 +50,17 @@ class User extends BaseUser {
    */
   private $productsUpdated;
 
+  /**
+   * @ORM\OneToMany(targetEntity="App\Entity\Person", mappedBy="userCreated", orphanRemoval=true)
+   */
+  private $peopleCreated;
+
+  /**
+   * @ORM\OneToMany(targetEntity="App\Entity\Person", mappedBy="userUpdated", orphanRemoval=true)
+   */
+  private $peopleUpdated;
+
+
   public function __construct() {
     parent::__construct();
     $this->brandsCreated = new ArrayCollection();
@@ -57,6 +69,15 @@ class User extends BaseUser {
     $this->categoriesUpdated = new ArrayCollection();
     $this->productsCreated = new ArrayCollection();
     $this->productsUpdated = new ArrayCollection();
+    $this->peopleCreated = new ArrayCollection();
+    $this->peopleUpdated = new ArrayCollection();
+  }
+
+  public function toJSON() {
+    return [
+      "id"    => $this->id,
+      "username"  => $this->username,
+    ];
   }
 
   public function getRoles(): array
@@ -130,13 +151,6 @@ class User extends BaseUser {
       return $this;
   }
 
-  public function toJSON() {
-    return [
-      "id"    => $this->id,
-      "username"  => $this->username,
-    ];
-  }
-
   /**
    * @return Collection|Category[]
    */
@@ -200,6 +214,7 @@ class User extends BaseUser {
   }
 
   /**
+<<<<<<< HEAD
    * @return Collection|Product[]
    */
   public function getProductsCreated(): Collection
@@ -213,9 +228,25 @@ class User extends BaseUser {
           $this->productsCreated[] = $productsCreated;
           $productsCreated->setUserCreated($this);
       }
+    }
+    /**
+   * @return Collection|Person[]
+   */
+  public function getPeopleCreated(): Collection
+  {
+      return $this->peopleCreated;
+  }
+
+  public function addPeopleCreated(Person $peopleCreated): self
+  {
+      if (!$this->peopleCreated->contains($peopleCreated)) {
+          $this->peopleCreated[] = $peopleCreated;
+          $peopleCreated->setUserCreated($this);
+      }
 
       return $this;
   }
+
 
   public function removeProductsCreated(Product $productsCreated): self
   {
@@ -224,6 +255,17 @@ class User extends BaseUser {
           // set the owning side to null (unless already changed)
           if ($productsCreated->getUserCreated() === $this) {
               $productsCreated->setUserCreated(null);
+          }
+        }
+    }
+
+  public function removePeopleCreated(Person $peopleCreated): self
+  {
+      if ($this->peopleCreated->contains($peopleCreated)) {
+          $this->peopleCreated->removeElement($peopleCreated);
+          // set the owning side to null (unless already changed)
+          if ($peopleCreated->getUserCreated() === $this) {
+              $peopleCreated->setUserCreated(null);
           }
       }
 
@@ -243,6 +285,22 @@ class User extends BaseUser {
       if (!$this->productsUpdated->contains($productsUpdated)) {
           $this->productsUpdated[] = $productsUpdated;
           $productsUpdated->setUserUpdated($this);
+
+      }
+    }
+    /**
+   * @return Collection|Person[]
+   */
+  public function getPeopleUpdated(): Collection
+  {
+      return $this->peopleUpdated;
+  }
+
+  public function addPeopleUpdated(Person $peopleUpdated): self
+  {
+      if (!$this->peopleUpdated->contains($peopleUpdated)) {
+          $this->peopleUpdated[] = $peopleUpdated;
+          $peopleUpdated->setUserUpdated($this);
       }
 
       return $this;
@@ -255,6 +313,17 @@ class User extends BaseUser {
           // set the owning side to null (unless already changed)
           if ($productsUpdated->getUserUpdated() === $this) {
               $productsUpdated->setUserUpdated(null);
+          }
+        }
+    }
+
+  public function removePeopleUpdated(Person $peopleUpdated): self
+  {
+      if ($this->peopleUpdated->contains($peopleUpdated)) {
+          $this->peopleUpdated->removeElement($peopleUpdated);
+          // set the owning side to null (unless already changed)
+          if ($peopleUpdated->getUserUpdated() === $this) {
+              $peopleUpdated->setUserUpdated(null);
           }
       }
 
