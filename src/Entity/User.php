@@ -70,6 +70,16 @@ class User extends BaseUser {
    */
   private $suppliersUpdated;
 
+  /**
+   * @ORM\OneToMany(targetEntity="App\Entity\Address", mappedBy="userCreated", orphanRemoval=true)
+   */
+  private $adressesCreated;
+
+  /**
+   * @ORM\OneToMany(targetEntity="App\Entity\Address", mappedBy="userUpdated", orphanRemoval=true)
+   */
+  private $adressesUpdated;
+
 
   public function __construct() {
     parent::__construct();
@@ -83,6 +93,8 @@ class User extends BaseUser {
     $this->peopleUpdated = new ArrayCollection();
     $this->suppliersCreated = new ArrayCollection();
     $this->suppliersUpdated = new ArrayCollection();
+    $this->adressesCreated = new ArrayCollection();
+    $this->adressesUpdated = new ArrayCollection();
   }
 
   public function toJSON() {
@@ -398,6 +410,68 @@ class User extends BaseUser {
           // set the owning side to null (unless already changed)
           if ($suppliersUpdated->getUserUpdated() === $this) {
               $suppliersUpdated->setUserUpdated(null);
+          }
+      }
+
+      return $this;
+  }
+
+  /**
+   * @return Collection|Address[]
+   */
+  public function getAdressesCreated(): Collection
+  {
+      return $this->adressesCreated;
+  }
+
+  public function addAdressesCreated(Address $adressesCreated): self
+  {
+      if (!$this->adressesCreated->contains($adressesCreated)) {
+          $this->adressesCreated[] = $adressesCreated;
+          $adressesCreated->setUserCreated($this);
+      }
+
+      return $this;
+  }
+
+  public function removeAdressesCreated(Address $adressesCreated): self
+  {
+      if ($this->adressesCreated->contains($adressesCreated)) {
+          $this->adressesCreated->removeElement($adressesCreated);
+          // set the owning side to null (unless already changed)
+          if ($adressesCreated->getUserCreated() === $this) {
+              $adressesCreated->setUserCreated(null);
+          }
+      }
+
+      return $this;
+  }
+
+  /**
+   * @return Collection|Address[]
+   */
+  public function getAdressesUpdated(): Collection
+  {
+      return $this->adressesUpdated;
+  }
+
+  public function addAdressesUpdated(Address $adressesUpdated): self
+  {
+      if (!$this->adressesUpdated->contains($adressesUpdated)) {
+          $this->adressesUpdated[] = $adressesUpdated;
+          $adressesUpdated->setUserUpdated($this);
+      }
+
+      return $this;
+  }
+
+  public function removeAdressesUpdated(Address $adressesUpdated): self
+  {
+      if ($this->adressesUpdated->contains($adressesUpdated)) {
+          $this->adressesUpdated->removeElement($adressesUpdated);
+          // set the owning side to null (unless already changed)
+          if ($adressesUpdated->getUserUpdated() === $this) {
+              $adressesUpdated->setUserUpdated(null);
           }
       }
 
