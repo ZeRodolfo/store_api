@@ -54,6 +54,26 @@ class PersonRepository extends DefaultRepository
     }
     */
 
+    public function save(Person $person) {
+        $this->clear();
+
+        $em = $this->registry->getManager();
+
+        try {
+            $em->persist($person);
+        } catch (Exception $ex) {
+            $this->errors = $ex->getMessage();
+
+            return false;
+        } finally {
+            $em->flush();
+        }
+
+        $this->data = $person;
+
+        return true;
+    }
+
     public function toJSON() {
         if ($this->data instanceof Person) {
             return $this->data->toJSON();
