@@ -37,6 +37,28 @@ class Supplier
      */
     private $sendEmailServiceOrder;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="suppliersCreated")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $userCreated;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="suppliersUpdated")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $userUpdated;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $updatedAt;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,6 +108,54 @@ class Supplier
     public function setSendEmailServiceOrder(bool $sendEmailServiceOrder): self
     {
         $this->sendEmailServiceOrder = $sendEmailServiceOrder;
+
+        return $this;
+    }
+
+    public function getUserCreated(): ?User
+    {
+        return $this->userCreated;
+    }
+
+    public function setUserCreated(?User $userCreated): self
+    {
+        $this->userCreated = $userCreated;
+
+        return $this;
+    }
+
+    public function getUserUpdated(): ?User
+    {
+        return $this->userUpdated;
+    }
+
+    public function setUserUpdated(?User $userUpdated): self
+    {
+        $this->userUpdated = $userUpdated;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

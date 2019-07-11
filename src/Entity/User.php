@@ -60,6 +60,16 @@ class User extends BaseUser {
    */
   private $peopleUpdated;
 
+  /**
+   * @ORM\OneToMany(targetEntity="App\Entity\Supplier", mappedBy="userCreated", orphanRemoval=true)
+   */
+  private $suppliersCreated;
+
+  /**
+   * @ORM\OneToMany(targetEntity="App\Entity\Supplier", mappedBy="userUpdated", orphanRemoval=true)
+   */
+  private $suppliersUpdated;
+
 
   public function __construct() {
     parent::__construct();
@@ -71,6 +81,8 @@ class User extends BaseUser {
     $this->productsUpdated = new ArrayCollection();
     $this->peopleCreated = new ArrayCollection();
     $this->peopleUpdated = new ArrayCollection();
+    $this->suppliersCreated = new ArrayCollection();
+    $this->suppliersUpdated = new ArrayCollection();
   }
 
   public function toJSON() {
@@ -324,6 +336,68 @@ class User extends BaseUser {
           // set the owning side to null (unless already changed)
           if ($peopleUpdated->getUserUpdated() === $this) {
               $peopleUpdated->setUserUpdated(null);
+          }
+      }
+
+      return $this;
+  }
+
+  /**
+   * @return Collection|Supplier[]
+   */
+  public function getSuppliersCreated(): Collection
+  {
+      return $this->suppliersCreated;
+  }
+
+  public function addSuppliersCreated(Supplier $suppliersCreated): self
+  {
+      if (!$this->suppliersCreated->contains($suppliersCreated)) {
+          $this->suppliersCreated[] = $suppliersCreated;
+          $suppliersCreated->setUserCreated($this);
+      }
+
+      return $this;
+  }
+
+  public function removeSuppliersCreated(Supplier $suppliersCreated): self
+  {
+      if ($this->suppliersCreated->contains($suppliersCreated)) {
+          $this->suppliersCreated->removeElement($suppliersCreated);
+          // set the owning side to null (unless already changed)
+          if ($suppliersCreated->getUserCreated() === $this) {
+              $suppliersCreated->setUserCreated(null);
+          }
+      }
+
+      return $this;
+  }
+
+  /**
+   * @return Collection|Supplier[]
+   */
+  public function getSuppliersUpdated(): Collection
+  {
+      return $this->suppliersUpdated;
+  }
+
+  public function addSuppliersUpdated(Supplier $suppliersUpdated): self
+  {
+      if (!$this->suppliersUpdated->contains($suppliersUpdated)) {
+          $this->suppliersUpdated[] = $suppliersUpdated;
+          $suppliersUpdated->setUserUpdated($this);
+      }
+
+      return $this;
+  }
+
+  public function removeSuppliersUpdated(Supplier $suppliersUpdated): self
+  {
+      if ($this->suppliersUpdated->contains($suppliersUpdated)) {
+          $this->suppliersUpdated->removeElement($suppliersUpdated);
+          // set the owning side to null (unless already changed)
+          if ($suppliersUpdated->getUserUpdated() === $this) {
+              $suppliersUpdated->setUserUpdated(null);
           }
       }
 
