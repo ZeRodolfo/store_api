@@ -68,6 +68,11 @@ class Address
      */
     private $updatedAt;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Supplier", inversedBy="address")
+     */
+    private $supplier;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -189,6 +194,18 @@ class Address
     public function setUpdatedAt(\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getSupplier(): ?Supplier
+    {
+        return $this->supplier;
+    }
+
+    public function setSupplier(?Supplier $supplier): self
+    {
+        $this->supplier = $supplier;
 
         return $this;
     }
