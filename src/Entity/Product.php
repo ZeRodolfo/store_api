@@ -72,6 +72,19 @@ class Product
         $this->updatedAt = new DateTime('now');
     }
 
+    public function toJSON() {
+        return [
+            "name" => $this->name,
+            "description" => $this->description,
+            "active" => $this->active,
+            "userCreated" => $this->userCreated->toJSON(),
+            "userUpdated" => $this->userUpdated->toJSON(),
+            "createdAt" => $this->createdAt->format('Y-m-d'),
+            "updatedAt" => $this->updatedAt->format('Y-m-d'),
+            "categories" => $this->getCategories()
+        ];
+    }
+
     public function getId(): ?int
     {
         return $this->id;
