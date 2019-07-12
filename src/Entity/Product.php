@@ -2,11 +2,13 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
+//use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 use \DateTime;
+
+use App\Lib\JsonCollection as ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -73,7 +75,9 @@ class Product
     }
 
     public function toJSON() {
+        $data = $this->categories->toArray();
         return [
+            "id" => $this->id,
             "name" => $this->name,
             "description" => $this->description,
             "active" => $this->active,
@@ -81,7 +85,7 @@ class Product
             "userUpdated" => $this->userUpdated->toJSON(),
             "createdAt" => $this->createdAt->format('Y-m-d'),
             "updatedAt" => $this->updatedAt->format('Y-m-d'),
-            "categories" => $this->getCategories()
+            "categories" => $data
         ];
     }
 
