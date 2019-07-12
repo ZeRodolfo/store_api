@@ -54,6 +54,26 @@ class SupplierRepository extends DefaultRepository
     }
     */
 
+    public function save(Supplier $supplier) {
+        $this->clear();
+
+        $em = $this->registry->getManager();
+
+        try {
+            $em->persist($supplier);
+        } catch (Exception $ex) {
+            $this->errors = $ex->getMessage();
+
+            return false;
+        } finally {
+            $em->flush();
+        }
+
+        $this->data = $supplier;
+
+        return true;
+    }
+
     public function toJSON() {
         if ($this->data instanceof Supplier) {
             return $this->data->toJSON();
