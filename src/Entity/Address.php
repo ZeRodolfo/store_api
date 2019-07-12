@@ -93,6 +93,25 @@ class Address
         $this->createdAt = isset($data->createdAt) ? $data->createdAt : $this->createdAt;
         $this->updatedAt = isset($data->updatedAt) ? $data->updatedAt : $this->updatedAt;
     }
+		
+    public function toJSON() {
+        $supplier = $this->supplier !== NULL ? $this->supplier->toJSON() : NULL;
+
+        return [
+            "id"    => $this->id,
+            "street"  => $this->street,
+            "district" => $this->district,
+            "number" => $this->number,
+            "postalCode" => $this->postalCode,
+            "complement" => $this->complement,
+            "note" => $this->note,
+            "userCreated" => $this->userCreated->toJSON(),
+            "userUpdated" => $this->userUpdated->toJSON(),
+            "createdAt"   => $this->createdAt->format('d-m-Y'),
+            "updatedAt"   => $this->updatedAt->format('d-m-Y'),
+            "supplier" => $supplier,
+        ];
+    }
 
     public function getId(): ?int
     {

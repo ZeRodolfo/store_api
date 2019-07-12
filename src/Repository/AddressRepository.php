@@ -53,4 +53,18 @@ class AddressRepository extends DefaultRepository
         ;
     }
     */
+
+    public function toJSON() {
+        if ($this->data instanceof Address) {
+            return $this->data->toJSON();
+        } else {
+            $collections = [];
+
+            foreach ($this->data as $data) {
+                $collections[] = $data->toJSON();
+            }
+
+            return $collections;
+        }
+    }
 }
