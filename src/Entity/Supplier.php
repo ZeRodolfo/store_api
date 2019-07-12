@@ -103,7 +103,7 @@ class Supplier
             "createdAt" => $this->createdAt->format('Y-m-d'),
             "updatedAt" => $this->updatedAt->format('Y-m-d'),
             "person" => $this->person->toJSON()
-        ]
+        ];
     }
 
     public function getId(): ?int
