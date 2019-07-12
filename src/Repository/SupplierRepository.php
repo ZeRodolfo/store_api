@@ -74,6 +74,26 @@ class SupplierRepository extends DefaultRepository
         return true;
     }
 
+    public function delete(Supplier $supplier) {
+        $this->clear();
+
+        $em = $this->registry->getManager();
+
+        try {
+            $em->remove($supplier);
+        } catch (Exception $ex) {
+            $this->errors = $ex->getMessage();
+
+            return false;
+        } finally {
+            $em->flush();
+        }
+
+        $this->data = [];
+
+        return true;
+    }
+
     public function toJSON() {
         if ($this->data instanceof Supplier) {
             return $this->data->toJSON();
