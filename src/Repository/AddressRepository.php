@@ -54,6 +54,26 @@ class AddressRepository extends DefaultRepository
     }
     */
 
+    public function save(Address $address) {
+        $this->clear();
+
+        $em = $this->registry->getManager();
+
+        try {
+            $em->persist($address);
+        } catch (Exception $ex) {
+            $this->errors = $ex->getMessage();
+
+            return false;
+        } finally {
+            $em->flush();
+        }
+
+        $this->data = $address;
+
+        return true;
+    }
+
     public function toJSON() {
         if ($this->data instanceof Address) {
             return $this->data->toJSON();
